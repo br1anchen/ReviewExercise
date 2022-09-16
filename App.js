@@ -28,20 +28,16 @@ function App() {
     handleFilterChanged(keyword, type);
   }
 
-  useEffect(() => {
-    async function fetchKommunes() {
-      try {
-        const kommunes = await getKommunes();
-        setKommunes(kommunes);
-        setFilteredKommunes(kommunes);
-        setIsLoaded(true);
-      } catch (error) {
-        console.error(error);
-        setIsLoaded(false);
-      }
+  useEffect(async () => {
+    try {
+      const kommunes = await getKommunes();
+      setKommunes(kommunes);
+      setFilteredKommunes(kommunes);
+      setIsLoaded(true);
+    } catch (error) {
+      console.error(error);
+      setIsLoaded(false);
     }
-
-    fetchKommunes();
   }, []);
 
   function handleFilterChanged(keyword, filterType) {
