@@ -6,7 +6,6 @@
  * @property {string} status - Status of the kommune information.
  */
 
-
 /**
  * Returned Response interface.
  * @typedef {Object} IKommuneResponse
