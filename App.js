@@ -41,8 +41,7 @@ function App() {
   }, []);
 
   function handleFilterChanged(keyword, filterType) {
-    const matcher = makeMatcher(keyword, filterType);
-    setFilteredKommunes(komunes.filter(matcher));
+    setFilteredKommunes(komunes.filter((k) => k[filterType].indexOf(keyword) !== -1));
   }
 
   return (
@@ -91,17 +90,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-/**
- * Factory function to make different match
- *
- * @param {string} match
- * @param {FilterType} type
- * @returns {Function} (k: IKommune) => boolean
- */
-const makeMatcher = (match, type) => (k) => {
-  return k[type].toLowerCase().indexOf(match.trim().toLowerCase()) !== -1;
-};
 
 const DEFAULT_FILTER_TYPE = "description";
 const FILTERS = [
