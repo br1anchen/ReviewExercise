@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, SafeAreaView, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  SafeAreaView,
+  FlatList,
+  Button,
+} from "react-native";
 
 import { getKommunes } from "./api";
-import ListFilter from "./List/ListFilter";
 
 function App() {
   const [filteredKommunes, setFilteredKommunes] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [komunes, setKommunes] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState(DEFAULT_FILTER_TYPE);
+
+  function handleKeywordChanged(evt) {
+    setKeyword(evt.nativeEvent.text);
+    handleFilterChanged(evt.nativeEvent.text, selectedFilter);
+  }
+
+  function handleFilterSelected(type) {
+    setSelectedFilter(type);
+    handleFilterChanged(keyword, type);
+  }
 
   useEffect(() => {
     async function fetchKommunes() {
@@ -33,12 +51,22 @@ function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ListFilter
-        placeholder="Type search keyword here"
-        onFilterChanged={handleFilterChanged}
-        defaultFilter={DEFAULT_FILTER_TYPE}
-        filters={FILTERS}
+      <TextInput
+        style={{ height: 40 }}
+        value={keyword}
+        placeholder={"Type search keyword here"}
+        onChange={handleKeywordChanged}
       />
+      {FILTERS.map((filter, index) => (
+        <Button
+          key={index}
+          title={filter.text}
+          color={filter.type === selectedFilter ? "red" : "black"}
+          onPress={() => {
+            handleFilterSelected(filter.type);
+          }}
+        />
+      ))}
       {isLoaded ? (
         <FlatList
           data={filteredKommunes.map((kommune) => ({
